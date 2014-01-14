@@ -34,7 +34,7 @@ function! s:finder.find_begin() "{{{
     setlocal vb t_vb=
     try
         " Jump to function-like word, and check arguments, and block.
-		normal! [m
+		keepjumps normal! [m
         while 1
 			if search(s:FUNCTION_PATTERN, 'bW') == 0
 				return NONE
@@ -78,7 +78,7 @@ function! s:finder.find_end() "{{{
 
     let vb = &vb
     setlocal vb t_vb=
-    normal! ]M
+    keepjumps normal! ]M
     let &vb = vb
 
     if line('.') == orig_lnum && col('.') == orig_col
