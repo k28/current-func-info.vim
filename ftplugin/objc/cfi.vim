@@ -10,7 +10,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 " }}}
 
-let s:FUNCTION_PATTERN = '\C'.'\s*-\s*(\s*\w\+\s*\*\?)\s*\(\w\+\)\s*'
+let s:FUNCTION_PATTERN = '\C'.'^\s*-\s*(\s*\w\+\s*\*\?)\s*\(\w\+\)\s*'
 let s:FUNCTION_VAR_PATTERN = '\C' . '\(\w\+\)\s*:\s*('
 
 let s:finder = cfi#create_finder('objc')
