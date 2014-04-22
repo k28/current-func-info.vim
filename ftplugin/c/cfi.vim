@@ -7,25 +7,25 @@ if get(g:, 'cfi_disable') || get(g:, 'loaded_cfi_ftplugin_c')
 endif
 let g:loaded_cfi_ftplugin_c = 1
 
-" Saving 'cpoptions' {{{
+" Saving 'cpoptions' 
 let s:save_cpo = &cpo
 set cpo&vim
-" }}}
+" 
 
 
 let s:FUNCTION_PATTERN = '\C'.'\(\w\+\)\s*('
 
 let s:finder = cfi#create_finder('c')
 
-function! s:finder.get_func_name() "{{{
+function! s:finder.get_func_name() 
     let NONE = ''
     if self.phase isnot 2 || !has_key(self.temp, 'funcname')
         return NONE
     endif
     return self.temp.funcname
-endfunction "}}}
+endfunction 
 
-function! s:finder.find_begin() "{{{
+function! s:finder.find_begin() 
     let NONE = []
     let [orig_lnum, orig_col] = [line('.'), col('.')]
 
@@ -48,14 +48,18 @@ function! s:finder.find_begin() "{{{
             endif
             for [fn; args] in [
             \   ['search', '(', 'W'],
-            \   ['searchpair', '(', '', ')'],
+            \   ['searchpair', '(', '', ')', 'W'],
             \]
-                if call(fn, args) == 0
+                let callResult = call(fn, args)
+                if callResult == 0 || callResult == -1
                     return NONE
                 endif
             endfor
             if join(getline('.', '$'), '')[col('.') :] =~# '\s*[^;]'
                 let self.temp.funcname = funcname
+                break
+            else
+                " If not break, it is an infinite loop.
                 break
             endif
         endwhile
@@ -70,7 +74,7 @@ function! s:finder.find_begin() "{{{
         return NONE
     endif
     return [line('.'), col('.')]
-endfunction "}}}
+endfunction 
 
 function! s:finder.find_end() "{{{
     let NONE = []
